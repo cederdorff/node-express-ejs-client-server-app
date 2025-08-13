@@ -35,6 +35,8 @@ code .
 
 **Note**: If `code .` doesn't work, open VS Code manually and use **File → Open Folder** to select your project directory.
 
+---
+
 ## Step 2: Initialize package.json
 
 In VS Code, create a new file called `package.json` and add the following content:
@@ -70,6 +72,8 @@ In VS Code, create a new file called `package.json` and add the following conten
 - Save the file (Ctrl+S or Cmd+S)
 - Your VS Code explorer should show `package.json` in the project root
 
+---
+
 ## Step 3: Install Dependencies
 
 Open VS Code's integrated terminal:
@@ -90,6 +94,8 @@ After installation completes, you should see:
 - A `node_modules` folder in your project
 - A `package-lock.json` file
 - Success message in terminal: "added X packages, and audited Y packages"
+
+---
 
 ## Step 4: Create the Server File (Build and Test in Parts)
 
@@ -261,6 +267,8 @@ app.listen(3000, () => console.log("Server running at http://localhost:3000"));
 4. **Routes**: Handle GET (show form) and POST (process form)
 5. **Start Server**: Listen on port 3000
 
+---
+
 ## Step 5: Create Views Directory
 
 In VS Code:
@@ -280,14 +288,87 @@ mkdir views
 - You should see a `views` folder in your VS Code Explorer
 - The folder should be at the same level as `server.js` and `package.json`
 
-## Step 6: Create the EJS Template
+---
+
+## Step 6: Create the EJS Template (Build and Test in Parts)
+
+### Step 6a: Create Basic HTML Structure
 
 In VS Code:
 
 1. Right-click on the `views` folder
 2. Select "New File"
 3. Name it `index.ejs`
-4. Add the following content:
+4. Start with this basic HTML structure:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Client Server - EJS</title>
+  </head>
+  <body>
+    <h1>Welcome to My Server!</h1>
+  </body>
+</html>
+```
+
+**What this does:**
+
+- Creates a basic HTML5 document
+- Sets the page title that appears in the browser tab
+- Displays a simple welcome message
+
+### 🧪 Test Step 6a: Basic Template
+
+1. Save the file (Ctrl+S or Cmd+S)
+2. In terminal, run: `npm run dev`
+3. Open browser to `http://localhost:3000`
+4. You should see: "Welcome to My Server!" on the page
+5. Check the browser tab - it should show "Client Server - EJS"
+6. Stop the server (Ctrl+C) to continue building
+
+### Step 6b: Add the Form Structure
+
+Replace the welcome message with a form:
+
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Client Server - EJS</title>
+  </head>
+  <body>
+    <form method="POST" action="/submit">
+      <input type="text" name="name" placeholder="Please enter your name" />
+      <button type="submit">Send</button>
+    </form>
+  </body>
+</html>
+```
+
+**What this does:**
+
+- `method="POST"`: Tells the form to use POST request (not GET)
+- `action="/submit"`: Form data will be sent to "/submit" route
+- `name="name"`: Creates a form field that the server can access as `req.body.name`
+- `placeholder`: Shows hint text in the input field
+
+### 🧪 Test Step 6b: Form Display
+
+1. Save the file
+2. Run: `npm run dev`
+3. Visit `http://localhost:3000`
+4. You should see:
+   - An input field with placeholder text
+   - A "Send" button
+5. Try typing in the input field - it should work
+6. Don't click "Send" yet - we haven't added the greeting logic!
+7. Stop the server (Ctrl+C)
+
+### Step 6c: Add EJS Conditional Logic
+
+Add the greeting that appears after form submission:
 
 ```html
 <!DOCTYPE html>
@@ -310,21 +391,76 @@ In VS Code:
 
 **EJS Syntax Explanation:**
 
-- `<% if (name) { %>` - JavaScript logic (if statement)
-- `<%= name %>` - Output variable content (escaped)
+- `<% if (name) { %>` - JavaScript logic (if statement) - only shows greeting if name exists
+- `<%= name %>` - Output variable content (escaped for security)
 - `<% } %>` - Close JavaScript block
 
-### 🧪 Test Step 6: Verify Template Structure
+### 🧪 Test Step 6c: Complete Functionality
 
-- Save the file (Ctrl+S or Cmd+S)
-- Your file structure should now look like:
-  ```
-  node-ejs-client-server/
-  ├── package.json
-  ├── server.js
-  └── views/
-      └── index.ejs
-  ```
+1. Save the file
+2. Run: `npm run dev`
+3. Visit `http://localhost:3000`
+4. **First, test the initial load:**
+   - You should see just the form (no greeting)
+   - This proves the `if (name)` condition works when name is empty
+5. **Now test form submission:**
+   - Enter your name in the input field
+   - Click "Send"
+   - You should see: "Hello [Your Name] 👋" appear below the form
+6. **Test different names:**
+   - The form stays visible, so you can try different names
+   - Each submission should update the greeting
+7. Keep the server running for the next step!
+
+### 🧪 Test Step 6d: Verify Template Structure
+
+Your file structure should now look like:
+
+```
+node-express-ejs-client-server-app/
+├── package.json
+├── package-lock.json
+├── server.js
+├── node_modules/
+└── views/
+    └── index.ejs
+```
+
+### Step 6e: Understanding the EJS Flow
+
+**When someone first visits the page (GET request):**
+
+1. Server sends `{ name: "" }` to template
+2. `<% if (name) { %>` evaluates to `false` (empty string)
+3. Only the form is displayed
+
+**When someone submits the form (POST request):**
+
+1. Server gets form data in `req.body.name`
+2. Server sends `{ name: "John" }` to template
+3. `<% if (name) { %>` evaluates to `true`
+4. Both form AND greeting are displayed
+
+### 🧪 Test Step 6e: Advanced Testing
+
+With your server still running, try these edge cases:
+
+1. **Empty form submission:**
+
+   - Leave the input field empty
+   - Click "Send"
+   - You should see "Hello 👋" (no name, but the condition still works)
+
+2. **Special characters:**
+
+   - Try entering "John & Jane"
+   - The `<%= %>` syntax automatically escapes HTML, so it's safe
+
+3. **Browser back button:**
+   - After submitting, click browser's back button
+   - You should return to the original form (no greeting)
+
+---
 
 ## Step 7: First Test - Start Your Server
 
@@ -374,6 +510,8 @@ If you see this message, your server is working! 🎉
 - Check your `server.js` file for the `app.get("/", ...)` route
 - Make sure you saved all files
 
+---
+
 ## Step 8: Test Hot Reload Feature
 
 ### 🧪 Test Step 8: Verify Hot Reload
@@ -387,6 +525,8 @@ If you see this message, your server is working! 🎉
 
 This proves that the Node.js `--watch` flag is working correctly.
 
+---
+
 ## Step 9: Understanding the Flow
 
 1. **Initial GET request**: Browser requests `/`
@@ -399,6 +539,8 @@ This proves that the Node.js `--watch` flag is working correctly.
    - Server receives form data in `req.body.name`
    - Server renders `index.ejs` with the submitted name
    - Greeting is displayed
+
+---
 
 ## Step 10: Development Tips and Final Testing
 
@@ -459,6 +601,8 @@ node-ejs-client-server/
     └── index.ejs         # EJS template
 ```
 
+---
+
 ## VS Code Tips for Students
 
 ### Essential Shortcuts:
@@ -473,6 +617,8 @@ node-ejs-client-server/
 - **EJS Language Support**: Syntax highlighting for .ejs files
 - **Node.js Extension Pack**: Collection of Node.js tools
 - **Thunder Client**: API testing (alternative to Postman)
+
+---
 
 ## Common Issues & Solutions
 
@@ -497,6 +643,8 @@ node-ejs-client-server/
 - Check that `index.ejs` is in the `views` folder
 - Verify `app.set("view engine", "ejs");` is in server.js
 
+---
+
 ## Extension Ideas
 
 Once you have the basic version working, try these improvements:
@@ -506,6 +654,8 @@ Once you have the basic version working, try these improvements:
 3. Add more form fields (age, email, etc.)
 4. Create additional pages/routes
 5. Add error handling
+
+---
 
 ## Learning Objectives Achieved
 
