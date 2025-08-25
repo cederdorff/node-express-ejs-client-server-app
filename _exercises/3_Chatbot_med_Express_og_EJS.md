@@ -221,7 +221,6 @@ Udvid din chat bot, så den kan svare forskelligt afhængigt af beskedens indhol
    ```
 
 2. **Tilpas POST-routen i `server.js` med flere svarmuligheder:**
-3. **Tilpas POST-routen i `server.js` med flere svarmuligheder:**
 
    ```js
    app.post("/chat", (req, res) => {
@@ -271,7 +270,7 @@ Udvid din chat bot, så den kan svare forskelligt afhængigt af beskedens indhol
    - `Math.random()` giver variation i svarene
    - Nested loops finder det rigtige svar baseret på keywords
 
-4. **Test den nye logik:**
+3. **Test den nye logik:**
    - Prøv at skrive "hej", "hello" eller "hi" - botten skal svare forskelligt hver gang
    - Prøv "hvordan går det" - botten skal give et relevant svar
    - Prøv "farvel" eller "bye" - botten skal sige farvel

@@ -1,13 +1,15 @@
-# 3. Chat logik med arrays & objekter
+# 4. Chat logik med arrays & objekter
 
-Her finder du guides og øvelser til undervisningsgangen om chatlogik i Node.js med arrays og objekter.
+Denne guide bygger videre på [3_Chatbot_med_Express_og_EJS.md](3_Chatbot_med_Express_og_EJS.md) og udvider din chatbot med avanceret chatlogik, strukturering af svar, randomisering, historik og brugerdefinerede svar.
 
 ---
 
-## Øvelse 1: Opret en svar-database med arrays og objekter
+## Øvelse 1: Svar-database med arrays og objekter
+
+Bemærk: Hvis du allerede har oprettet et responses-array med keywords og svar i din chatbot (se [3_Chatbot_med_Express_og_EJS.md](3_Chatbot_med_Express_og_EJS.md)), kan du bruge denne øvelse som opsummering og reference. Formålet er at sikre, at alle forstår strukturen og kan udvide den med flere svar og logik. Gå gerne direkte videre til de mere avancerede øvelser, hvis du har styr på grundstrukturen!
 
 **Mål:**
-Lær at strukturere chatbot-svar med arrays af objekter.
+Strukturer chatbot-svar med arrays af objekter, så du nemt kan udvide og vedligeholde din bot.
 
 **Guide:**
 
@@ -18,18 +20,18 @@ Lær at strukturere chatbot-svar med arrays af objekter.
      { keywords: ["farvel", "bye"], answers: ["Farvel!", "Goodbye!"] }
    ];
    ```
-2. Udvid POST-routen, så den bruger `responses` til at matche beskeder.
+2. Udvid POST-routen, så den matcher beskeder med keywords og vælger et svar fra `responses`.
 
 ---
 
 ## Øvelse 2: String-metoder og pattern matching
 
 **Mål:**
-Brug string-metoder til at genkende nøgleord i brugerens besked.
+Brug string-metoder til at genkende nøgleord i brugerens besked og matche dem med svar.
 
 **Guide:**
 
-1. I POST-routen, loop over `responses` og brug fx:
+1. Loop over `responses` og brug fx:
    ```js
    const userMessage = req.body.message.toLowerCase();
    let botReply = "Jeg forstod ikke din besked.";
@@ -39,18 +41,18 @@ Brug string-metoder til at genkende nøgleord i brugerens besked.
      }
    });
    ```
-2. Test med forskellige beskeder.
+2. Test med forskellige beskeder og se om botten svarer korrekt.
 
 ---
 
 ## Øvelse 3: Intelligent svarudvælgelse med if/else og switch
 
 **Mål:**
-Brug kontrolstrukturer til at vælge det rigtige svar.
+Brug kontrolstrukturer til at vælge det rigtige svar, fx hvis brugeren skriver "hvordan går det" eller "tak".
 
 **Guide:**
 
-1. Udvid loopet med if/else eller switch for at vælge svar baseret på keyword.
+1. Udvid loopet med if/else eller switch:
    ```js
    if (userMessage.includes("hvordan går det")) {
      botReply = "Jeg har det fint, tak!";
@@ -65,7 +67,7 @@ Brug kontrolstrukturer til at vælge det rigtige svar.
 ## Øvelse 4: Tilfældig svargenerering med Math.random()
 
 **Mål:**
-Gør chatbotten mere naturlig ved at vælge et tilfældigt svar.
+Gør chatbotten mere naturlig ved at vælge et tilfældigt svar fra `answers`.
 
 **Guide:**
 
@@ -81,28 +83,31 @@ Gør chatbotten mere naturlig ved at vælge et tilfældigt svar.
 ## Øvelse 5: Udvid chatbotten med flere kategorier og randomisering
 
 **Mål:**
-Byg videre på chatbotten med flere keywords og svarmuligheder.
+Byg videre med flere keywords og svarmuligheder, så botten kan håndtere flere typer beskeder.
 
 **Guide:**
 
-1. Tilføj flere objekter til `responses` med nye keywords og svar.
+1. Tilføj flere objekter til `responses`:
    ```js
-   responses.push({ keywords: ["mad", "spise"], answers: ["Jeg elsker pizza!", "Hvad kan du lide at spise?"] });
+   responses.push({
+     keywords: ["mad", "spise"],
+     answers: ["Jeg elsker pizza!", "Hvad kan du lide at spise?"]
+   });
    ```
-2. Test at chatbotten kan håndtere flere typer beskeder og svarer varieret.
+2. Test at botten kan håndtere flere beskedtyper og svarer varieret.
 
 ---
 
 ## Øvelse 6: Chatbot med brugerdefinerede svar
 
 **Mål:**
-Lad brugeren selv tilføje nye svar og keywords til chatbotten via en form.
+Lad brugeren tilføje nye svar og keywords via en form.
 
 **Guide:**
 
-1. Tilføj en ny HTML-form i din EJS-fil, hvor brugeren kan indtaste et keyword og et svar.
-2. Tilføj en POST-route i `server.js`, der modtager keyword og svar og tilføjer dem til `responses`-arrayet.
-3. Test at chatbotten nu kan svare med brugerens egne svar.
+1. Tilføj en HTML-form i din EJS-fil, hvor brugeren kan indtaste keyword og svar.
+2. Tilføj en POST-route i `server.js`, der modtager keyword og svar og tilføjer dem til `responses`.
+3. Test at botten nu kan svare med brugerens egne svar.
 
 ---
 
@@ -115,11 +120,18 @@ Gem tidspunktet for hver besked og vis chat-historikken med tid.
 
 1. Når du gemmer en besked i `messages`, tilføj et timestamp:
    ```js
-   messages.push({ sender: "Bruger", text: userMessage, time: new Date().toLocaleTimeString() });
+   messages.push({
+     sender: "Bruger",
+     text: userMessage,
+     time: new Date().toLocaleTimeString()
+   });
    ```
 2. Vis tidspunktet sammen med beskeden i din EJS-fil:
    ```html
-   <p><strong><%= msg.sender %>:</strong> <%= msg.text %> <em>(<%= msg.time %>)</em></p>
+   <p>
+     <strong><%= msg.sender %>:</strong> <%= msg.text %>
+     <em>(<%= msg.time %>)</em>
+   </p>
    ```
 
 ---
@@ -127,11 +139,11 @@ Gem tidspunktet for hver besked og vis chat-historikken med tid.
 ## Øvelse 8: Chatbot med kategorier
 
 **Mål:**
-Organisér svar i kategorier og lad chatbotten svare forskelligt afhængigt af kategori.
+Organisér svar i kategorier og lad botten svare forskelligt afhængigt af kategori.
 
 **Guide:**
 
-1. Udvid `responses`-arrayet med en kategori for hvert objekt:
+1. Udvid `responses` med en kategori for hvert objekt:
    ```js
    { category: "hilsen", keywords: ["hej"], answers: ["Hej!"] }
    ```
@@ -153,5 +165,7 @@ Begræns hvor mange beskeder der vises i chatten (fx de seneste 10).
 2. Test at kun de seneste beskeder vises.
 
 ---
+
+Denne guide bygger direkte videre på din chatbot fra [3_Chatbot_med_Express_og_EJS.md](3_Chatbot_med_Express_og_EJS.md) og giver dig inspiration til at gøre din chat mere avanceret og dynamisk med arrays, objekter og brugerinput.
 
 Sig til hvis du ønsker guides til endnu flere øvelser eller mere avancerede funktioner!
