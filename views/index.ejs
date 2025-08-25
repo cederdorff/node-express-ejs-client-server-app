@@ -6,11 +6,22 @@
   <body>
     <form method="POST" action="/submit">
       <input type="text" name="name" placeholder="Please enter your name" />
+      <input type="text" name="age" placeholder="Indtast din alder" />
       <button type="submit">Send</button>
     </form>
 
-    <% if (name) { %>
-    <h1>Hello <%= name %> 👋</h1>
+    <% if (error) { %>
+    <p style="color: red;"><%= error %></p>
     <% } %>
+
+    <% if (name) { %>
+    <h1>Hello <%= name %> (<%= age %> år) 👋</h1>
+    <% } %>
+
+    <ul>
+      <% names.forEach(n => { %>
+      <li><%= n %></li>
+      <% }) %>
+    </ul>
   </body>
 </html>
