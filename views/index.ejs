@@ -1,27 +1,31 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title>Client-Server App with Node.js, Express and EJS</title>
+    <title>Chatbot med Express og EJS</title>
+    <link rel="stylesheet" href="/css/style.css" />
   </head>
   <body>
-    <form method="POST" action="/submit">
-      <input type="text" name="name" placeholder="Please enter your name" />
-      <input type="text" name="age" placeholder="Indtast din alder" />
-      <button type="submit">Send</button>
-    </form>
-
-    <% if (error) { %>
-    <p style="color: red;"><%= error %></p>
-    <% } %>
-
-    <% if (name) { %>
-    <h1>Hello <%= name %> (<%= age %> år) 👋</h1>
-    <% } %>
-
-    <ul>
-      <% names.forEach(n => { %>
-      <li><%= n %></li>
-      <% }) %>
-    </ul>
+    <div class="chat-container">
+      <h1>Min Chatbot</h1>
+      <% if (typeof error !== 'undefined' && error) { %>
+        <div class="error-message">
+          <strong>Fejl:</strong> <%= error %>
+        </div>
+      <% } %>
+      <form method="POST" action="/chat" class="chat-form">
+        <input type="text" name="message" placeholder="Skriv din besked her" required />
+        <button type="submit">Send</button>
+      </form>
+      <div class="chat-messages">
+        <% if (messages && messages.length) { %>
+          <% messages.forEach(msg => { %>
+            <div class="message <%= msg.sender.toLowerCase() %>"><strong><%= msg.sender %>:</strong> <%= msg.text %></div>
+          <% }) %>
+        <% } %>
+      </div>
+      <% if (botReply) { %>
+        <div><strong>Bot svar:</strong> <%= botReply %></div>
+      <% } %>
+    </div>
   </body>
 </html>
