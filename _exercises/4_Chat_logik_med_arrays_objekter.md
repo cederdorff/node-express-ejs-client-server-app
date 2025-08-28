@@ -48,7 +48,7 @@ Denne guide bygger videre på [3_Chatbot_med_Express_og_EJS.md](3_Chatbot_med_Ex
   <summary>Vis komplet kodeeksempel</summary>
 
 ```js
-// Placer øverst i server.js, efter require-statements
+// Placer øverst i server.js, efter imports
 const responses = [
   {
     keywords: ["hej", "hello", "hallo", "god dag"],
@@ -1204,46 +1204,227 @@ app.post("/clear", (req, res) => {
 
 ---
 
-## Øvelse 13: Chatbot med session og brugeridentifikation
+## Øvelse 13: Array-manipulation og objekt-operationer
 
-**Step guide:**
+**Målsætning:** Forstå grundlæggende array- og objekt-operationer i Node.js kontekst.
 
-1. Tilføj et inputfelt for brugernavn i din EJS-template.
-2. Gem brugernavn i session eller som variabel og vis det sammen med beskederne.
-3. Udvid beskedobjektet med brugernavn og tid.
+**Baggrund:** At mestre arrays og objekter er fundamentalt for at bygge robuste applikationer. Vi vil fokusere på praktiske metoder til at manipulere data.
+
+**Detaljeret step guide:**
+
+1. **Array-metoder:** Lær de vigtigste array-metoder
+
+   - `push()`, `pop()`, `shift()`, `unshift()`
+   - `filter()`, `map()`, `find()`, `some()`, `every()`
+   - `sort()`, `reverse()`, `slice()`, `splice()`
+
+2. **Objekt-operationer:** Arbejd med objekter på forskellige måder
+
+   - `Object.keys()`, `Object.values()`, `Object.entries()`
+   - Destructuring assignment
+   - Spread operator (`...`)
+
+3. **Praktisk implementation:** Anvendt i chatbot-kontekst
+   - Filtrér beskeder efter keywords
+   - Sortér beskeder efter tidsstempel
+   - Gruppér svar efter kategori
+
+**Hjælpende tips:**
+
+- Array-metoder som `filter()` og `map()` returnerer nye arrays
+- Brug destructuring til at udpakke objekter elegant
 
 <details>
-  <summary>Vis kodehint</summary>
+  <summary>Vis komplet kodeeksempel</summary>
 
 ```js
-messages.push({
-  sender: username,
-  text: userMessage,
-  time: new Date().toLocaleTimeString()
+// Array-manipulation eksempler
+const messages = [
+  { text: "Hej", category: "hilsen", timestamp: Date.now() },
+  { text: "Hvordan har du det?", category: "spørgsmål", timestamp: Date.now() },
+  { text: "Farvel", category: "afsked", timestamp: Date.now() }
+];
+
+// Filtrér beskeder efter kategori
+const greetings = messages.filter(msg => msg.category === "hilsen");
+
+// Map til kun tekst
+const messageTexts = messages.map(msg => msg.text);
+
+// Find besked med specifikt indhold
+const questionMessage = messages.find(msg => msg.category === "spørgsmål");
+
+// Objekt-operationer
+const chatStats = {
+  totalMessages: 150,
+  activeUsers: 25,
+  categories: ["hilsen", "spørgsmål", "afsked"]
+};
+
+// Destructuring
+const { totalMessages, activeUsers } = chatStats;
+
+// Object.entries til iteration
+Object.entries(chatStats).forEach(([key, value]) => {
+  console.log(`${key}: ${value}`);
 });
+
+// Spread operator til objekt-kopiering
+const newStats = { ...chatStats, lastUpdate: new Date() };
 ```
 
 </details>
 
 ---
 
-## Øvelse 14: Chatbot med API-integration
+## Øvelse 14: Import/Export og moduler i Node.js
 
-**Step guide:**
+**Målsætning:** Lær at organisere kode i moduler med import/export og forstå forskellen mellem CommonJS og ES6 modules.
 
-1. Tilføj en route, hvor botten fx kan hente vejrudsigten.
-2. Vis API-data i chatten.
+**Baggrund:** Moduler gør koden mere organiseret og genanvendelig. Node.js understøtter både CommonJS (require/module.exports) og ES6 modules (import/export).
+
+**Detaljeret step guide:**
+
+1. **Setup ES6 modules:** Konfigurér dit projekt til ES6 modules
+
+   - Tilføj `"type": "module"` til din `package.json`
+   - Eller brug `.mjs` filendelser
+
+2. **Opret chatbot-moduler:** Del din kode op i logiske moduler
+
+   - `responses.js` - Svar-database
+   - `utils.js` - Hjælpefunktioner
+   - `chatLogic.js` - Chat-logik
+
+3. **Export-patterns:** Lær forskellige export-mønstre
+
+   - Named exports
+   - Default exports
+   - Mixed exports
+
+4. **Import-patterns:** Forstå import-syntax
+   - Named imports
+   - Default imports
+   - Namespace imports
+   - Dynamic imports
+
+**Hjælpende tips:**
+
+- Start med simple named exports
+- Brug default export til hovedfunktioner
+- Konsistens er vigtig - vælg ét mønster
 
 <details>
-  <summary>Vis kodehint</summary>
+  <summary>Vis komplet kodeeksempel</summary>
+
+**responses.js:**
 
 ```js
-// Eksempel med fetch eller axios
-app.post("/chat", async (req, res) => {
-  if (req.body.message.includes("vejr")) {
-    // Hent data fra API og send som svar
+// Named exports
+export const greetings = [
+  { keywords: ["hej", "hallo"], answers: ["Hej der!", "Hallo!"] },
+  {
+    keywords: ["godmorgen", "god morgen"],
+    answers: ["Godmorgen!", "Har du sovet godt?"]
   }
-  // ...resten af chatlogikken...
+];
+
+export const farewells = [
+  { keywords: ["farvel", "bye"], answers: ["Farvel!", "Vi ses senere!"] }
+];
+
+// Default export
+export default [...greetings, ...farewells];
+```
+
+**utils.js:**
+
+```js
+// Hjælpefunktioner som named exports
+export function getRandomItem(array) {
+  return array[Math.floor(Math.random() * array.length)];
+}
+
+export function findMatchingResponse(message, responses) {
+  const lowerMessage = message.toLowerCase();
+  return responses.find(response =>
+    response.keywords.some(keyword => lowerMessage.includes(keyword))
+  );
+}
+
+export function formatTimestamp(date = new Date()) {
+  return date.toLocaleTimeString("da-DK");
+}
+
+// Default export funktion
+export default function createMessage(text, sender = "bot") {
+  return {
+    text,
+    sender,
+    timestamp: formatTimestamp(),
+    id: Date.now()
+  };
+}
+```
+
+**chatLogic.js:**
+
+```js
+import responses, { greetings, farewells } from "./responses.js";
+import createMessage, { getRandomItem, findMatchingResponse } from "./utils.js";
+
+// Default export af chat-logik
+export default function processMessage(userMessage) {
+  const matchedResponse = findMatchingResponse(userMessage, responses);
+
+  if (matchedResponse) {
+    const answer = getRandomItem(matchedResponse.answers);
+    return createMessage(answer);
+  }
+
+  return createMessage("Jeg forstår ikke helt. Kan du uddybe?");
+}
+
+// Named export af statistik-funktion
+export function getChatStatistics(messages) {
+  const stats = {
+    total: messages.length,
+    byCategory: {},
+    recent: messages.slice(-10)
+  };
+
+  // Gruppér efter kategori
+  messages.forEach(msg => {
+    const category = msg.category || "unknown";
+    stats.byCategory[category] = (stats.byCategory[category] || 0) + 1;
+  });
+
+  return stats;
+}
+```
+
+**server.js (opdateret):**
+
+```js
+import express from "express";
+import processMessage, { getChatStatistics } from "./chatLogic.js";
+
+const app = express();
+let messages = [];
+
+app.post("/chat", (req, res) => {
+  const userMessage = req.body.message;
+  const botResponse = processMessage(userMessage);
+
+  messages.push(
+    { text: userMessage, sender: "user", timestamp: new Date() },
+    botResponse
+  );
+
+  res.render("index", {
+    messages,
+    stats: getChatStatistics(messages)
+  });
 });
 ```
 
@@ -1251,73 +1432,82 @@ app.post("/chat", async (req, res) => {
 
 ---
 
-## Øvelse 15: Chatbot med avanceret filtrering og søgning
+## Opsummering
 
-**Step guide:**
+Du har nu bygget en komplet chatbot med:
 
-1. Tilføj et søgefelt i din EJS-template.
-2. Filtrér `messages` arrayet baseret på søgeord og vis kun relevante beskeder.
+- Struktureret svar-database med arrays og objekter
+- Intelligent pattern matching og string-metoder
+- Tilfældig svargenerering for naturlige samtaler
+- Avancerede funktioner som kategorier, historik og brugerdefinerede svar
+- Emojis og personlighed
+- **Array-manipulation og objekt-operationer**
+- **Modulær kode-struktur med import/export**
 
-<details>
-  <summary>Vis kodehint</summary>
-
-```js
-const filteredMessages = messages.filter(msg => msg.text.includes(searchTerm));
-```
-
-</details>
+Din chatbot er nu klar til videre udvikling og kan fungere som udgangspunkt for mere avancerede projekter!
 
 ---
 
-## Øvelse 16: Chatbot med dark mode og brugerindstillinger
+## Agenda-tilpasset progression
 
-**Step guide:**
+Denne øvelsesrække følger agendaen og sikrer fokus på:
 
-1. Tilføj en knap til at skifte mellem light/dark mode i din EJS-template.
-2. Skift CSS-klasser dynamisk baseret på brugerens valg.
+**Opsamling:** Hvordan håndterede vi data og svar? → Øvelse 1-2 (arrays/objekter/responses)
 
-<details>
-  <summary>Vis kodehint</summary>
+**Client/Server, SSR, GET & POST:** → Fortsætter fra forrige øvelse med Express-routes
 
-```html
-<button onclick="document.body.classList.toggle('dark-mode')">
-  Skift tema
-</button>
-```
+**JavaScript arrays & objekter:** → Øvelse 1, 5, 8, 13 (databaser, kategorier, strukturering, manipulation)
 
-</details>
+**String-metoder & pattern matching:** → Øvelse 2-3 (keywords, includes(), toLowerCase())
 
----
+**Kontrolstrukturer:** → Øvelse 3-4 (if/else, switch, intelligent udvælgelse)
 
-## Øvelse 17: Chatbot med persistent storage
+**Tilfældig svargenerering:** → Øvelse 4-5 (Math.random(), arrays af svar)
 
-**Step guide:**
+**Import/Export & Moduler:** → Øvelse 14 (ES6 modules, organisering af kode)
 
-1. Gem chat-historik i en fil eller database, så beskederne bevares efter server-genstart.
-2. Læs beskeder ind fra fil/database når serveren starter.
+**Hands-on:** → Øvelse 6-12 (praktiske udvidelser med emojis, historik, etc.)
 
-<details>
-  <summary>Vis kodehint</summary>
-
-```js
-// Brug fs-modulet eller en database
-```
-
-</details>
+Denne struktur sikrer, at I får det maksimale udbytte inden for den afsatte tid uden at blive overvældet!
 
 ---
 
-## Øvelse 18: Chatbot med admin-funktioner
+## Opsummering
 
-**Step guide:**
+Du har nu bygget en komplet chatbot med:
 
-1. Opret en admin-side med statistik og styring af chatten.
-2. Beskyt admin-siden med adgangskode eller session.
+- Struktureret svar-database med arrays og objekter
+- Intelligent pattern matching og string-metoder
+- Tilfældig svargenerering for naturlige samtaler
+- Avancerede funktioner som kategorier, historik og brugerdefinerede svar
+- Emojis og personlighed
+- **Avanceret array-manipulation og objekt-operationer**
+- **Modulær kode-struktur med import/export**
+- **Data-transformation og analyse-funktioner**
+- **Objekt-orienteret design med klasser**
 
-<details>
-  <summary>Vis kodehint</summary>
-
-  <!-- Opret en ny route og EJS-template til admin -->
-</details>
+Din chatbot er nu klar til videre udvikling og kan fungere som udgangspunkt for mere avancerede projekter!
 
 ---
+
+## Agenda-tilpasset progression
+
+Denne udvidede øvelsesrække følger agendaen og sikrer dybere fokus på:
+
+**Opsamling:** Hvordan håndterede vi data og svar? → Øvelse 1-2 (arrays/objekter/responses)
+
+**Client/Server, SSR, GET & POST:** → Fortsætter fra forrige øvelse med Express-routes
+
+**JavaScript arrays & objekter (UDVIDET):** → Øvelse 1, 5, 8, 13, 15, 16 (databaser, manipulation, transformation, OOP)
+
+**String-metoder & pattern matching:** → Øvelse 2-3 (keywords, includes(), toLowerCase())
+
+**Kontrolstrukturer:** → Øvelse 3-4 (if/else, switch, intelligent udvælgelse)
+
+**Tilfældig svargenerering:** → Øvelse 4-5 (Math.random(), arrays af svar)
+
+**Import/Export & Moduler (NYT):** → Øvelse 14 (ES6 modules, organisering, CommonJS vs ES6)
+
+**Hands-on:** → Øvelse 6-12 (praktiske udvidelser med emojis, historik, etc.)
+
+Denne struktur sikrer, at I får det maksimale udbytte inden for den afsatte tid!
