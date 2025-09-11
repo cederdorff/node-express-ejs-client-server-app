@@ -76,7 +76,7 @@ app.post("/api/messages", (req, res) => {
       messages.push({ sender: "Bot", text: botReply });
     }
   }
-  res.json({ messages, botReply, error });
+  res.status(201).json({ messages, botReply, error });
 });
 
 app.delete("/api/messages", (req, res) => {
