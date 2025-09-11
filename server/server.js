@@ -1,9 +1,14 @@
-import express from "express"; // Import express framework
-const app = express(); // Create an instance of express
+// ========== Import dependencies ========== //
+import cors from "cors";
+import express from "express";
 
-app.set("view engine", "ejs"); // Set EJS as the templating engine
-app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
-app.use(express.static("public")); // Gør public-mappen tilgængelig for CSS og assets
+// ========== Setup Express App ========== //
+const app = express();
+const PORT = 3000;
+
+// Middleware
+app.use(express.json()); // Parse JSON request bodies
+app.use(cors()); // Enable CORS for all routes - allow requests from any origin
 
 // Chatbeskeder
 const messages = [];
@@ -18,7 +23,7 @@ const responses = [
 
 // Input sanitering
 function sanitizeInput(input) {
-  if (typeof input !== 'string') return '';
+  if (typeof input !== "string") return "";
   return input
     .replace(/[<>]/g, "")
     .replace(/javascript:/gi, "")
@@ -26,13 +31,20 @@ function sanitizeInput(input) {
     .trim();
 }
 
-// GET - render chat
+// GET
+
+// Root endpoint
 app.get("/", (req, res) => {
-  res.render("index", { messages, botReply: "", error: "" });
+  res.send("Node.js Express Chatbot API 🎉");
 });
 
-// POST - chat besked
-app.post("/chat", (req, res) => {
+// GET /messages - return all chat messages as JSON
+app.get("/api/messages", (req, res) => {
+  res.json({ messages });
+});
+
+// POST /chat - receive a message, return bot reply and chat log as JSON
+app.post("/api/messages", (req, res) => {
   let userMessage = req.body.message;
   userMessage = sanitizeInput(userMessage);
   let botReply = "";
@@ -49,19 +61,14 @@ app.post("/chat", (req, res) => {
     botReply = "Din besked er for lang. Prøv at gøre den kortere!";
   } else {
     const lowerMessage = userMessage.toLowerCase();
-    let foundResponse = false;
-    for (let response of responses) {
-      for (let keyword of response.keywords) {
-        if (lowerMessage.includes(keyword)) {
-          const randomIndex = Math.floor(Math.random() * response.answers.length);
-          botReply = response.answers[randomIndex];
-          foundResponse = true;
-          break;
-        }
-      }
-      if (foundResponse) break;
-    }
-    if (!foundResponse) {
+    // Brug array methods for at finde svar
+    const matchedResponse = responses.find(response =>
+      response.keywords.some(keyword => lowerMessage.includes(keyword))
+    );
+    if (matchedResponse) {
+      const randomIndex = Math.floor(Math.random() * matchedResponse.answers.length);
+      botReply = matchedResponse.answers[randomIndex];
+    } else {
       botReply = `Du skrev: "${userMessage}". Prøv at skrive "hej" eller "hjælp"!`;
     }
     if (!error) {
@@ -69,8 +76,15 @@ app.post("/chat", (req, res) => {
       messages.push({ sender: "Bot", text: botReply });
     }
   }
-  res.render("index", { messages, botReply, error });
+  res.json({ messages, botReply, error });
 });
 
-// Listen on port 3000
-app.listen(3000, () => console.log("Server running at http://localhost:3000"));
+app.delete("/api/messages", (req, res) => {
+  messages.length = 0; // Clear the messages array
+  res.json({ messages });
+});
+
+// ========== Start the server ========== //
+app.listen(PORT, () => {
+  console.log(`API listening on http://localhost:${PORT}`);
+});
