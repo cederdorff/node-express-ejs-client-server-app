@@ -11,7 +11,7 @@ app.use(express.json()); // Parse JSON request bodies
 app.use(cors()); // Enable CORS for all routes - allow requests from any origin
 
 // Chatbeskeder
-const messages = [];
+let messages = [];
 
 // Svar-logik
 const responses = [
@@ -80,7 +80,7 @@ app.post("/api/messages", (req, res) => {
 });
 
 app.delete("/api/messages", (req, res) => {
-  messages.length = 0; // Clear the messages array
+  messages = []; // Clear the messages array
   res.json({ messages });
 });
 
