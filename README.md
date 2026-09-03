@@ -1,12 +1,11 @@
-# Løsningsforslag · Din første server-renderede EJS-app
+# Løsningsforslag · Formhåndtering, validering og svarlogik
 
-Løsningsforslag til [Øvelse 1: Din første server-renderede EJS-app](https://github.com/cederdorff/wu-e26a/blob/main/opgaver/express-ejs-formular.md) fra WU-E26A.
+Løsningsforslag til [Øvelse 2: Formhåndtering, validering og svarlogik](https://github.com/cederdorff/wu-e26a/blob/main/opgaver/express-ejs-formhaandtering-svarlogik.md) fra WU-E26A — bygger videre på [Øvelse 1](https://github.com/cederdorff/node-express-ejs-client-server-app/tree/solve-1-express-ejs-formular).
 
-En Express-server, der renderer en EJS-template. Formularen sender et navn til serveren via `POST /submit`, og serveren sender navnet tilbage til templaten, som viser en personlig hilsen.
+Serveren validerer navn og alder, viser en forståelig fejlbesked ved ugyldigt input, og gemmer gyldige navne i et array, som EJS renderer som en liste.
 
 ```text
-Browser -> GET / -> Express-route -> EJS -> HTML-response
-Browser -> POST /submit -> express.urlencoded() -> request.body -> POST-route -> EJS -> ny HTML-response
+Browser -> POST /submit -> request.body -> validering -> response.render() -> EJS -> HTML
 ```
 
 ## Kør projektet
@@ -20,16 +19,16 @@ npm run dev
 
 ## Tjekpunkt
 
-- `GET /` renderer en EJS-template med en formular
-- formularen sender et `POST`-request til den rigtige route
-- `express.urlencoded()` gør formularens data tilgængelige i `request.body`
-- serveren sender navnet til templaten, som viser en personlig hilsen
-- både GET- og POST-requestet kan findes i Network-panelet
+- viser en fejl, hvis navnet mangler
+- viser en fejl, hvis alder mangler eller ikke er et tal
+- afviser decimaler og aldre uden for intervallet 1–120
+- tilføjer et gyldigt navn til et array
+- renderer både hilsen, fejlbesked og listen med EJS
 
 ## Projektstruktur
 
 ```text
-express-ejs-formular/
+express-ejs-formhaandtering-svarlogik/
 ├── node_modules/
 ├── views/
 │   └── index.ejs

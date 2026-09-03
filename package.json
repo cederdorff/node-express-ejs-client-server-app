@@ -1,7 +1,7 @@
 {
-  "name": "express-ejs-formular",
+  "name": "express-ejs-formhaandtering-svarlogik",
   "version": "1.0.0",
-  "description": "Løsningsforslag: Din første server-renderede EJS-app",
+  "description": "Løsningsforslag: Formhåndtering, validering og svarlogik",
   "main": "server.js",
   "type": "module",
   "scripts": {

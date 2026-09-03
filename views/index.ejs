@@ -9,14 +9,34 @@
     <main>
       <h1>Sig hej</h1>
 
+      <% if (error) { %>
+        <p><%= error %></p>
+      <% } %>
+
       <form method="POST" action="/submit">
         <label for="name">Hvad hedder du?</label>
-        <input id="name" name="name" type="text" />
+        <input id="name" name="name" type="text" value="<%= name %>" />
+
+        <label for="age">Hvor gammel er du?</label>
+        <input id="age" name="age" type="number" step="any" value="<%= age %>" />
+
         <button type="submit">Send</button>
       </form>
 
-      <% if (name) { %>
-        <p>Hej, <%= name %>! 👋</p>
+      <% if (name && age && !error) { %>
+        <h2>Hello <%= name %> (<%= age %> år) 👋</h2>
+      <% } %>
+
+      <h2>Indsendte navne (<%= names.length %>)</h2>
+
+      <% if (names.length === 0) { %>
+        <p>Der er endnu ikke indsendt nogen navne.</p>
+      <% } else { %>
+        <ul>
+          <% for (const name of names) { %>
+            <li><%= name %></li>
+          <% } %>
+        </ul>
       <% } %>
     </main>
   </body>
