@@ -1,6 +1,6 @@
 # Løsningsforslag · Server-renderet AMAbot med regelbaseret svarlogik
 
-Løsningsforslag til [Øvelse 3: Server-renderet AMAbot med regelbaseret svarlogik](https://github.com/cederdorff/wu-e26a/blob/main/opgaver/express-ejs-amabot.md) fra WU-E26A.
+Løsningsforslag til [Øvelse 3: Server-renderet AMAbot med regelbaseret svarlogik](https://github.com/cederdorff/wu-e26a/blob/main/opgaver/express-ejs-amabot.md) fra WU-E26A (opgaveteksten ligger også som [`_exercises/express-ejs-amabot.md`](_exercises/express-ejs-amabot.md) i dette repo).
 
 AMAbot betyder *Ask Me Anything-bot*. Den svarer på spørgsmål ud fra regler, arrays og objekter — ikke kunstig intelligens. Serveren modtager spørgsmålet, vælger et svar og lader EJS generere den næste HTML-side (server-side rendering).
 
@@ -32,6 +32,8 @@ npm run dev
 
 ```text
 express-ejs-amabot/
+├── _exercises/
+│   └── express-ejs-amabot.md
 ├── node_modules/
 ├── public/
 │   └── styles.css
