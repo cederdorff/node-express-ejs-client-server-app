@@ -1,16 +1,32 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="da">
   <head>
-    <title>Client-Server App with Node.js, Express and EJS</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AMAbot</title>
+    <link rel="stylesheet" href="/styles.css" />
   </head>
   <body>
-    <form method="POST" action="/submit">
-      <input type="text" name="name" placeholder="Please enter your name" />
-      <button type="submit">Send</button>
-    </form>
+    <main>
+      <h1>Spørg Ada om alt</h1>
 
-    <% if (name) { %>
-    <h1>Hello <%= name %> 👋</h1>
-    <% } %>
+      <form method="POST" action="/ask">
+        <label for="question">Stil dit spørgsmål her:</label>
+        <input id="question" name="question" type="text" />
+        <button type="submit">Send</button>
+      </form>
+
+      <% if (error) { %>
+        <p role="alert"><%= error %></p>
+      <% } %>
+
+      <section class="messages">
+        <% for (const message of messages) { %>
+          <article class="<%= message.type %>">
+            <p><%= message.text %></p>
+          </article>
+        <% } %>
+      </section>
+    </main>
   </body>
 </html>

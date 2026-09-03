@@ -1,0 +1,49 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  padding: 2rem;
+  background-color: #f8fafc;
+  color: #0f172a;
+  font-family: system-ui, sans-serif;
+}
+
+main {
+  max-width: 640px;
+  margin: 0 auto;
+}
+
+form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+form input {
+  flex: 1;
+  padding: 0.5rem;
+}
+
+.messages {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.messages article {
+  padding: 0.75rem 1rem;
+  border-radius: 0.75rem;
+  max-width: 80%;
+}
+
+.question {
+  align-self: flex-end;
+  background-color: #dbeafe;
+}
+
+.answer {
+  align-self: flex-start;
+  background-color: #f1f5f9;
+}
