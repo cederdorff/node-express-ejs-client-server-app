@@ -1,6 +1,6 @@
 # Løsningsforslag · Formhåndtering, validering og svarlogik
 
-Løsningsforslag til [Øvelse 2: Formhåndtering, validering og svarlogik](https://github.com/cederdorff/wu-e26a/blob/main/opgaver/express-ejs-formhaandtering-svarlogik.md) fra WU-E26A — bygger videre på [Øvelse 1](https://github.com/cederdorff/node-express-ejs-client-server-app/tree/solve-1-express-ejs-formular).
+Løsningsforslag til [Øvelse 2: Formhåndtering, validering og svarlogik](https://github.com/cederdorff/wu-e26a/blob/main/opgaver/express-ejs-formhaandtering-svarlogik.md) fra WU-E26A — bygger videre på [Øvelse 1](https://github.com/cederdorff/node-express-ejs-client-server-app/tree/solve-1-express-ejs-formular). Begge opgavetekster ligger også i [`_exercises/`](_exercises/) i dette repo.
 
 Serveren validerer navn og alder, viser en forståelig fejlbesked ved ugyldigt input, og gemmer gyldige navne i et array, som EJS renderer som en liste.
 
@@ -29,6 +29,9 @@ npm run dev
 
 ```text
 express-ejs-formhaandtering-svarlogik/
+├── _exercises/
+│   ├── express-ejs-formular.md
+│   └── express-ejs-formhaandtering-svarlogik.md
 ├── node_modules/
 ├── views/
 │   └── index.ejs
