@@ -1,6 +1,6 @@
 # Løsningsforslag · Din første server-renderede EJS-app
 
-Løsningsforslag til [Øvelse 1: Din første server-renderede EJS-app](https://github.com/cederdorff/wu-e26a/blob/main/opgaver/express-ejs-formular.md) fra WU-E26A.
+Løsningsforslag til [Øvelse 1: Din første server-renderede EJS-app](https://github.com/cederdorff/wu-e26a/blob/main/opgaver/express-ejs-formular.md) fra WU-E26A (opgaveteksten ligger også som [`_exercises/express-ejs-formular.md`](_exercises/express-ejs-formular.md) i dette repo).
 
 En Express-server, der renderer en EJS-template. Formularen sender et navn til serveren via `POST /submit`, og serveren sender navnet tilbage til templaten, som viser en personlig hilsen.
 
@@ -30,6 +30,8 @@ npm run dev
 
 ```text
 express-ejs-formular/
+├── _exercises/
+│   └── express-ejs-formular.md
 ├── node_modules/
 ├── views/
 │   └── index.ejs
