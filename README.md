@@ -1,13 +1,14 @@
-# Løsningsforslag · Gør AMAbotten klogere med scoring og statistik
+# Løsningsforslag · Gem AMAbottens chathistorik i en JSON-fil
 
-Løsningsforslag til [Øvelse 4: Gør AMAbotten klogere med scoring og statistik](https://github.com/cederdorff/wu-e26a/blob/main/opgaver/express-ejs-amabot-statistik.md) fra WU-E26A — bygger videre på [Øvelse 3](https://github.com/cederdorff/node-express-ejs-client-server-app/tree/solve-3-express-ejs-amabot). Begge opgavetekster ligger også i [`_exercises/`](_exercises/) i dette repo.
+Løsningsforslag til [Øvelse 5: Gem AMAbottens chathistorik i en JSON-fil](https://github.com/cederdorff/wu-e26a/blob/main/opgaver/express-ejs-amabot-persistens.md) fra WU-E26A — bygger videre på [Øvelse 4](https://github.com/cederdorff/node-express-ejs-client-server-app/tree/solve-4-express-ejs-amabot-statistik). Alle tre opgavetekster ligger også i [`_exercises/`](_exercises/) i dette repo.
 
-AMAbotten undersøger nu alle regler i stedet for at stoppe ved den første, der matcher. Den vælger reglen med flest matchende nøgleord (`findBestAnswer()`) og tæller, hvilke emner der bliver spurgt mest til (`topicStats`).
+`messages` gemmes ikke længere i en variabel. `data/messages.json` er den eneste sandhed om samtalen: `GET /` og `POST /ask` læser og skriver filen direkte via `loadMessages()`/`saveMessages()`, hver gang de kører.
 
 ```text
-spørgsmål -> findBestAnswer() -> svar og kategori -> POST-route -> EJS
-                                           |
-                                           -> topicStats
+GET /      -> loadMessages() -> fs.readFile() -> JSON.parse()                    -> EJS -> HTML
+
+POST /ask  -> loadMessages() -> messages.push() -> saveMessages()
+                                                  -> JSON.stringify() -> fs.writeFile()
 ```
 
 ## Kør projektet
@@ -21,22 +22,22 @@ npm run dev
 
 ## Tjekpunkt
 
-- stadig kan svare og validere som i øvelse 3
-- undersøger alle regler
-- tæller matchende nøgleord (`countMatches()`)
-- vælger reglen med den højeste score (`findBestAnswer()`)
-- returnerer både svar og kategori
-- bruger et objekt (`topicStats`) som tæller
-- vælger en property med bracket notation
-- viser tællerne med EJS
+- stadig kan svare, validere og score som i øvelse 3 og 4
+- læser `data/messages.json` med `loadMessages()` i både `GET /` og `POST /ask`
+- skriver den opdaterede historik med `saveMessages()` i `POST /ask`
+- beholder samtalen efter en genstart af serveren
+- har ingen `messages`-variabel uden for `loadMessages()`, `saveMessages()` og routes
 
 ## Projektstruktur
 
 ```text
-express-ejs-amabot-statistik/
+express-ejs-amabot-persistens/
 ├── _exercises/
 │   ├── express-ejs-amabot.md
-│   └── express-ejs-amabot-statistik.md
+│   ├── express-ejs-amabot-statistik.md
+│   └── express-ejs-amabot-persistens.md
+├── data/
+│   └── messages.json
 ├── node_modules/
 ├── public/
 │   └── styles.css

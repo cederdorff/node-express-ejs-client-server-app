@@ -1,4 +1,5 @@
 import express from "express";
+import fs from "node:fs/promises";
 
 const app = express();
 const port = 3000;
@@ -7,7 +8,15 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
-const messages = [];
+async function loadMessages() {
+  const data = await fs.readFile("./data/messages.json", "utf8");
+  return JSON.parse(data);
+}
+
+async function saveMessages(messages) {
+  const json = JSON.stringify(messages, null, 2);
+  await fs.writeFile("./data/messages.json", json);
+}
 
 const answers = [
   {
@@ -67,11 +76,15 @@ function sanitizeQuestion(input) {
     .join("");
 }
 
-app.get("/", (request, response) => {
+app.get("/", async (request, response) => {
+  const messages = await loadMessages();
+
   response.render("index", { messages, error: "", topicStats });
 });
 
-app.post("/ask", (request, response) => {
+app.post("/ask", async (request, response) => {
+  const messages = await loadMessages();
+
   const rawQuestion = request.body.question;
   const question = sanitizeQuestion(rawQuestion).trim();
   let error = "";
@@ -88,6 +101,8 @@ app.post("/ask", (request, response) => {
       topicStats[result.category] = topicStats[result.category] + 1;
     }
   }
+
+  await saveMessages(messages);
 
   response.render("index", { messages, error, topicStats });
 });

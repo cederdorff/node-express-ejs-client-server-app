@@ -1,7 +1,7 @@
 {
-  "name": "express-ejs-amabot-statistik",
+  "name": "express-ejs-amabot-persistens",
   "version": "1.0.0",
-  "description": "Løsningsforslag: Gør AMAbotten klogere med scoring og statistik",
+  "description": "Løsningsforslag: Gem AMAbottens chathistorik i en JSON-fil",
   "main": "server.js",
   "type": "module",
   "scripts": {
