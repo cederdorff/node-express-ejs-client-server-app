@@ -8,6 +8,8 @@ app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 
+// ========== Data handling functions ========== //
+
 async function loadMessages() {
   const data = await fs.readFile("./data/messages.json", "utf8");
   return JSON.parse(data);
@@ -17,6 +19,8 @@ async function saveMessages(messages) {
   const json = JSON.stringify(messages, null, 2);
   await fs.writeFile("./data/messages.json", json);
 }
+
+// ========== Question handling functions ========== //
 
 const answers = [
   {
@@ -75,6 +79,8 @@ function sanitizeQuestion(input) {
     .filter((char) => char.codePointAt(0) > 31 && char.codePointAt(0) !== 127)
     .join("");
 }
+
+// ========== Routes ========== //
 
 app.get("/", async (request, response) => {
   const messages = await loadMessages();
