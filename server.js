@@ -24,23 +24,29 @@ async function saveMessages(messages) {
 
 const answers = [
   {
+    category: "hilsen",
+    keywords: ["hej", "hallo", "hello", "hey"],
+    answer: "Hej! Hvad vil du gerne vide om mig?"
+  },
+  {
     category: "navn",
     keywords: ["navn", "hedder", "hvem er du"],
-    answer: "Jeg hedder Ada. Hvad vil du ellers vide om mig?"
+    answer: "Jeg hedder RACE. Hvad vil du ellers vide om mig?"
   },
   {
     category: "bosted",
     keywords: ["bor", "by", "fra"],
-    answer: "Jeg bor i Aarhus."
+    answer: "Jeg bor i Aarhus. Nej vent, jeg er flyttet til Holstebro."
   },
   {
     category: "fritid",
     keywords: ["fritid", "hobby", "kan lide"],
-    answer: "I min fritid kan jeg godt lide at læse og gå ture."
+    answer: "I min fritid kan jeg godt lide at nørde JavaScript og lave små projekter."
   }
 ];
 
 const topicStats = {
+  hilsen: 0,
   navn: 0,
   bosted: 0,
   fritid: 0
