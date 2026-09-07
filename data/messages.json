@@ -1,1 +1,18 @@
-[]
+[
+  {
+    "type": "question",
+    "text": "Hej"
+  },
+  {
+    "type": "answer",
+    "text": "Hej! Hvad vil du gerne vide om mig?"
+  },
+  {
+    "type": "question",
+    "text": "Hvad hedder du?"
+  },
+  {
+    "type": "answer",
+    "text": "Jeg hedder RACE. Hvad vil du ellers vide om mig?"
+  }
+]
