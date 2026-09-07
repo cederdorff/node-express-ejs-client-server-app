@@ -1,12 +1,13 @@
-# Løsningsforslag · Server-renderet AMAbot med regelbaseret svarlogik
+# Løsningsforslag · Gør AMAbotten klogere med scoring og statistik
 
-Løsningsforslag til [Øvelse 3: Server-renderet AMAbot med regelbaseret svarlogik](https://github.com/cederdorff/wu-e26a/blob/main/opgaver/express-ejs-amabot.md) fra WU-E26A (opgaveteksten ligger også som [`_exercises/express-ejs-amabot.md`](_exercises/express-ejs-amabot.md) i dette repo).
+Løsningsforslag til [Øvelse 4: Gør AMAbotten klogere med scoring og statistik](https://github.com/cederdorff/wu-e26a/blob/main/opgaver/express-ejs-amabot-statistik.md) fra WU-E26A — bygger videre på [Øvelse 3](https://github.com/cederdorff/node-express-ejs-client-server-app/tree/solve-3-express-ejs-amabot). Begge opgavetekster ligger også i [`_exercises/`](_exercises/) i dette repo.
 
-AMAbot betyder *Ask Me Anything-bot*. Den svarer på spørgsmål ud fra regler, arrays og objekter — ikke kunstig intelligens. Serveren modtager spørgsmålet, vælger et svar og lader EJS generere den næste HTML-side (server-side rendering).
+AMAbotten undersøger nu alle regler i stedet for at stoppe ved den første, der matcher. Den vælger reglen med flest matchende nøgleord (`findBestAnswer()`) og tæller, hvilke emner der bliver spurgt mest til (`topicStats`).
 
 ```text
-Browser -> POST /ask -> request.body.question -> validering -> findAnswer()
-        -> messages array -> response.render() -> EJS -> HTML
+spørgsmål -> findBestAnswer() -> svar og kategori -> POST-route -> EJS
+                                           |
+                                           -> topicStats
 ```
 
 ## Kør projektet
@@ -20,20 +21,22 @@ npm run dev
 
 ## Tjekpunkt
 
-- beholder et enkelt visuelt udtryk (styles.css)
-- gør CSS tilgængelig fra `public/` med `express.static()`
-- viser en formular og en samtalehistorik
-- modtager et spørgsmål på `POST /ask`
-- vælger et regelbaseret, personligt svar via `findAnswer()`
-- afviser et tomt spørgsmål med en fejlbesked
-- saniterer input (fjerner usynlige kontroltegn) adskilt fra validering og EJS' escaping
+- stadig kan svare og validere som i øvelse 3
+- undersøger alle regler
+- tæller matchende nøgleord (`countMatches()`)
+- vælger reglen med den højeste score (`findBestAnswer()`)
+- returnerer både svar og kategori
+- bruger et objekt (`topicStats`) som tæller
+- vælger en property med bracket notation
+- viser tællerne med EJS
 
 ## Projektstruktur
 
 ```text
-express-ejs-amabot/
+express-ejs-amabot-statistik/
 ├── _exercises/
-│   └── express-ejs-amabot.md
+│   ├── express-ejs-amabot.md
+│   └── express-ejs-amabot-statistik.md
 ├── node_modules/
 ├── public/
 │   └── styles.css

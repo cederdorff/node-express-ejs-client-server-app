@@ -11,31 +11,54 @@ const messages = [];
 
 const answers = [
   {
+    category: "navn",
     keywords: ["navn", "hedder", "hvem er du"],
     answer: "Jeg hedder Ada. Hvad vil du ellers vide om mig?"
   },
   {
+    category: "bosted",
     keywords: ["bor", "by", "fra"],
     answer: "Jeg bor i Aarhus."
   },
   {
+    category: "fritid",
     keywords: ["fritid", "hobby", "kan lide"],
     answer: "I min fritid kan jeg godt lide at læse og gå ture."
   }
 ];
 
-function findAnswer(question) {
+const topicStats = {
+  navn: 0,
+  bosted: 0,
+  fritid: 0
+};
+
+function countMatches(keywords, normalizedQuestion) {
+  const matches = keywords.filter((keyword) => normalizedQuestion.includes(keyword));
+
+  return matches.length;
+}
+
+function findBestAnswer(question) {
   const normalizedQuestion = question.toLowerCase();
+  let bestScore = 0;
+  let bestAnswer = "Det kender jeg ikke svaret på endnu.";
+  let bestCategory = "";
 
   for (const answerGroup of answers) {
-    const hasMatch = answerGroup.keywords.some((keyword) => normalizedQuestion.includes(keyword));
+    const score = countMatches(answerGroup.keywords, normalizedQuestion);
 
-    if (hasMatch) {
-      return answerGroup.answer;
+    if (score > bestScore) {
+      bestScore = score;
+      bestAnswer = answerGroup.answer;
+      bestCategory = answerGroup.category;
     }
   }
 
-  return "Det kender jeg ikke svaret på endnu.";
+  return {
+    answer: bestAnswer,
+    category: bestCategory
+  };
 }
 
 function sanitizeQuestion(input) {
@@ -45,7 +68,7 @@ function sanitizeQuestion(input) {
 }
 
 app.get("/", (request, response) => {
-  response.render("index", { messages, error: "" });
+  response.render("index", { messages, error: "", topicStats });
 });
 
 app.post("/ask", (request, response) => {
@@ -57,11 +80,16 @@ app.post("/ask", (request, response) => {
     error = "Skriv et spørgsmål, før du sender.";
   } else {
     messages.push({ type: "question", text: question });
-    const answer = findAnswer(question);
-    messages.push({ type: "answer", text: answer });
+
+    const result = findBestAnswer(question);
+    messages.push({ type: "answer", text: result.answer });
+
+    if (result.category) {
+      topicStats[result.category] = topicStats[result.category] + 1;
+    }
   }
 
-  response.render("index", { messages, error });
+  response.render("index", { messages, error, topicStats });
 });
 
 app.listen(port, () => {

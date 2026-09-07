@@ -1,7 +1,7 @@
 {
-  "name": "express-ejs-amabot",
+  "name": "express-ejs-amabot-statistik",
   "version": "1.0.0",
-  "description": "Løsningsforslag: Server-renderet AMAbot med regelbaseret svarlogik",
+  "description": "Løsningsforslag: Gør AMAbotten klogere med scoring og statistik",
   "main": "server.js",
   "type": "module",
   "scripts": {
