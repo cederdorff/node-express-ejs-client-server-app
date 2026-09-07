@@ -11,16 +11,20 @@ const messages = [];
 
 const answers = [
   {
+    keywords: ["hej", "hallo", "hello", "hey"],
+    answer: "Hej! Hvad vil du gerne vide om mig?"
+  },
+  {
     keywords: ["navn", "hedder", "hvem er du"],
-    answer: "Jeg hedder Ada. Hvad vil du ellers vide om mig?"
+    answer: "Jeg hedder RACE. Hvad vil du ellers vide om mig?"
   },
   {
     keywords: ["bor", "by", "fra"],
-    answer: "Jeg bor i Aarhus."
+    answer: "Jeg bor i Aarhus. Nej vent, jeg er flyttet til Holstebro."
   },
   {
     keywords: ["fritid", "hobby", "kan lide"],
-    answer: "I min fritid kan jeg godt lide at læse og gå ture."
+    answer: "I min fritid kan jeg godt lide at nørde JavaScript og lave små projekter."
   }
 ];
 

@@ -8,19 +8,23 @@
   </head>
   <body>
     <main>
-      <h1>Spørg Ada om alt</h1>
+      <h1>🤖 Spørg RACE om alt</h1>
+      <p class="subtitle">RACE svarer ud fra nogle simple regler – prøv at spørge om hendes navn, by eller fritid.</p>
 
       <form method="POST" action="/ask">
-        <label for="question">Stil dit spørgsmål her:</label>
-        <input id="question" name="question" type="text" />
+        <label for="question" class="sr-only">Stil dit spørgsmål her:</label>
+        <input id="question" name="question" type="text" placeholder="Skriv dit spørgsmål her..." autocomplete="off" />
         <button type="submit">Send</button>
       </form>
 
       <% if (error) { %>
-        <p role="alert"><%= error %></p>
+        <p class="error" role="alert"><%= error %></p>
       <% } %>
 
       <section class="messages">
+        <% if (messages.length === 0) { %>
+          <p class="empty-state">Ingen beskeder endnu – stil dit første spørgsmål ovenfor.</p>
+        <% } %>
         <% for (const message of messages) { %>
           <article class="<%= message.type %>">
             <p><%= message.text %></p>
