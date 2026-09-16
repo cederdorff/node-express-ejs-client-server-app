@@ -4,9 +4,7 @@ import fs from "node:fs/promises";
 const app = express();
 const port = 3000;
 
-app.use(express.static("public"));
-app.use(express.urlencoded({ extended: true }));
-app.set("view engine", "ejs");
+app.use(express.json());
 
 // ========== Data handling functions ========== //
 
@@ -22,7 +20,7 @@ async function saveMessages(messages) {
 
 // ========== Question handling functions ========== //
 
-const answers = [
+let answers = [
   {
     category: "hilsen",
     keywords: ["hej", "hallo", "hello", "hey"],
@@ -86,37 +84,82 @@ function sanitizeQuestion(input) {
     .join("");
 }
 
-// ========== Routes ========== //
+// ========== /messages routes ========== //
 
-app.get("/", async (request, response) => {
+app.get("/messages", async (request, response) => {
   const messages = await loadMessages();
 
-  response.render("index", { messages, error: "", topicStats });
+  response.json(messages);
 });
 
-app.post("/ask", async (request, response) => {
+app.post("/messages", async (request, response) => {
   const messages = await loadMessages();
-
-  const rawQuestion = request.body.question;
-  const question = sanitizeQuestion(rawQuestion).trim();
-  let error = "";
+  const question = sanitizeQuestion(request.body.question).trim();
 
   if (!question) {
-    error = "Skriv et spørgsmål, før du sender.";
-  } else {
-    messages.push({ type: "question", text: question });
+    response.json({ error: "Skriv et spørgsmål, før du sender." });
+    return;
+  }
 
-    const result = findBestAnswer(question);
-    messages.push({ type: "answer", text: result.answer });
+  const message = { type: "question", text: question, createdAt: new Date().toISOString() };
+  messages.push(message);
 
-    if (result.category) {
-      topicStats[result.category] = topicStats[result.category] + 1;
-    }
+  const result = findBestAnswer(question);
+  const answerMessage = { type: "answer", text: result.answer, createdAt: new Date().toISOString() };
+  messages.push(answerMessage);
+
+  if (result.category) {
+    topicStats[result.category] = topicStats[result.category] + 1;
   }
 
   await saveMessages(messages);
 
-  response.render("index", { messages, error, topicStats });
+  response.json({ question: message, answer: answerMessage });
+});
+
+app.delete("/messages", async (request, response) => {
+  await saveMessages([]);
+
+  response.send();
+});
+
+// ========== /answers routes ========== //
+
+app.get("/answers", (request, response) => {
+  response.json(answers);
+});
+
+app.get("/answers/:category", (request, response) => {
+  const answerRule = answers.find((a) => a.category === request.params.category);
+
+  response.json(answerRule);
+});
+
+app.post("/answers", (request, response) => {
+  const newAnswerRule = {
+    category: request.body.category,
+    keywords: request.body.keywords,
+    answer: request.body.answer
+  };
+
+  answers.push(newAnswerRule);
+
+  response.json(newAnswerRule);
+});
+
+app.put("/answers/:category", (request, response) => {
+  const answerRule = answers.find((a) => a.category === request.params.category);
+
+  answerRule.keywords = request.body.keywords;
+  answerRule.answer = request.body.answer;
+
+  response.json(answerRule);
+});
+
+app.delete("/answers/:category", (request, response) => {
+  answers = answers.filter((a) => a.category !== request.params.category);
+
+  response.send();
 });
 
 app.listen(port, () => {

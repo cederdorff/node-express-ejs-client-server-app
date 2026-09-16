@@ -1,7 +1,7 @@
 {
-  "name": "express-ejs-amabot-persistens",
+  "name": "express-rest-api-amabot",
   "version": "1.0.0",
-  "description": "Løsningsforslag: Gem AMAbottens chathistorik i en JSON-fil",
+  "description": "Løsningsforslag: AMAbotten som REST API",
   "main": "server.js",
   "type": "module",
   "scripts": {
@@ -12,7 +12,6 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ejs": "^6.0.1",
     "express": "^5.2.1"
   }
 }
