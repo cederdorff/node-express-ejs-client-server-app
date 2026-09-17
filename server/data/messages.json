@@ -14,5 +14,15 @@
   {
     "type": "answer",
     "text": "Jeg hedder RACE. Hvad vil du ellers vide om mig?"
+  },
+  {
+    "type": "question",
+    "text": "Hvad er din livret?",
+    "createdAt": "2026-09-17T08:25:21.241Z"
+  },
+  {
+    "type": "answer",
+    "text": "Det kender jeg ikke svaret på endnu.",
+    "createdAt": "2026-09-17T08:25:21.241Z"
   }
 ]

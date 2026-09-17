@@ -18,30 +18,17 @@ async function saveMessages(messages) {
   await fs.writeFile("./data/messages.json", json);
 }
 
-// ========== Question handling functions ========== //
+async function loadAnswers() {
+  const data = await fs.readFile("./data/answers.json", "utf8");
+  return JSON.parse(data);
+}
 
-let answers = [
-  {
-    category: "hilsen",
-    keywords: ["hej", "hallo", "hello", "hey"],
-    answer: "Hej! Hvad vil du gerne vide om mig?"
-  },
-  {
-    category: "navn",
-    keywords: ["navn", "hedder", "hvem er du"],
-    answer: "Jeg hedder RACE. Hvad vil du ellers vide om mig?"
-  },
-  {
-    category: "bosted",
-    keywords: ["bor", "by", "fra"],
-    answer: "Jeg bor i Aarhus. Nej vent, jeg er flyttet til Holstebro."
-  },
-  {
-    category: "fritid",
-    keywords: ["fritid", "hobby", "kan lide"],
-    answer: "I min fritid kan jeg godt lide at nørde JavaScript og lave små projekter."
-  }
-];
+async function saveAnswers(answers) {
+  const json = JSON.stringify(answers, null, 2);
+  await fs.writeFile("./data/answers.json", json);
+}
+
+// ========== Question handling functions ========== //
 
 const topicStats = {
   hilsen: 0,
@@ -56,7 +43,7 @@ function countMatches(keywords, normalizedQuestion) {
   return matches.length;
 }
 
-function findBestAnswer(question) {
+function findBestAnswer(question, answers) {
   const normalizedQuestion = question.toLowerCase();
   let bestScore = 0;
   let bestAnswer = "Det kender jeg ikke svaret på endnu.";
@@ -104,7 +91,8 @@ app.post("/messages", async (request, response) => {
   const message = { type: "question", text: question, createdAt: new Date().toISOString() };
   messages.push(message);
 
-  const result = findBestAnswer(question);
+  const answers = await loadAnswers();
+  const result = findBestAnswer(question, answers);
   const answerMessage = { type: "answer", text: result.answer, createdAt: new Date().toISOString() };
   messages.push(answerMessage);
 
@@ -125,17 +113,21 @@ app.delete("/messages", async (request, response) => {
 
 // ========== /answers routes ========== //
 
-app.get("/answers", (request, response) => {
+app.get("/answers", async (request, response) => {
+  const answers = await loadAnswers();
+
   response.json(answers);
 });
 
-app.get("/answers/:category", (request, response) => {
+app.get("/answers/:category", async (request, response) => {
+  const answers = await loadAnswers();
   const answerRule = answers.find((a) => a.category === request.params.category);
 
   response.json(answerRule);
 });
 
-app.post("/answers", (request, response) => {
+app.post("/answers", async (request, response) => {
+  const answers = await loadAnswers();
   const newAnswerRule = {
     category: request.body.category,
     keywords: request.body.keywords,
@@ -144,20 +136,28 @@ app.post("/answers", (request, response) => {
 
   answers.push(newAnswerRule);
 
+  await saveAnswers(answers);
+
   response.json(newAnswerRule);
 });
 
-app.put("/answers/:category", (request, response) => {
+app.put("/answers/:category", async (request, response) => {
+  const answers = await loadAnswers();
   const answerRule = answers.find((a) => a.category === request.params.category);
 
   answerRule.keywords = request.body.keywords;
   answerRule.answer = request.body.answer;
 
+  await saveAnswers(answers);
+
   response.json(answerRule);
 });
 
-app.delete("/answers/:category", (request, response) => {
-  answers = answers.filter((a) => a.category !== request.params.category);
+app.delete("/answers/:category", async (request, response) => {
+  const answers = await loadAnswers();
+  const updatedAnswers = answers.filter((a) => a.category !== request.params.category);
+
+  await saveAnswers(updatedAnswers);
 
   response.send();
 });
