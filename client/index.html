@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AMAbot</title>
-    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
     <main>
@@ -18,24 +18,23 @@
       </form>
 
       <% if (error) { %>
-        <p class="error" role="alert"><%= error %></p>
+      <p class="error" role="alert"><%= error %></p>
       <% } %>
 
       <section class="messages">
         <% if (messages.length === 0) { %>
-          <p class="empty-state">Ingen beskeder endnu – stil dit første spørgsmål ovenfor.</p>
-        <% } %>
-        <% for (const message of messages) { %>
-          <article class="<%= message.type %>">
-            <p><%= message.text %></p>
-          </article>
+        <p class="empty-state">Ingen beskeder endnu – stil dit første spørgsmål ovenfor.</p>
+        <% } %> <% for (const message of messages) { %>
+        <article class="<%= message.type %>">
+          <p><%= message.text %></p>
+        </article>
         <% } %>
       </section>
 
       <h2 class="stats-heading">Spørgsmål fordelt på emner</h2>
       <ul class="stats">
         <% for (const stat of Object.entries(topicStats)) { %>
-          <li><%= stat[0] %>: <%= stat[1] %></li>
+        <li><%= stat[0] %>: <%= stat[1] %></li>
         <% } %>
       </ul>
     </main>
