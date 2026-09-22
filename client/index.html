@@ -5,38 +5,27 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>AMAbot</title>
     <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
   </head>
   <body>
     <main>
       <h1>🤖 Spørg RACE om alt</h1>
       <p class="subtitle">RACE svarer ud fra nogle simple regler – prøv at spørge om hendes navn, by eller fritid.</p>
 
-      <form method="POST" action="/ask">
+      <form id="question-form">
         <label for="question" class="sr-only">Stil dit spørgsmål her:</label>
         <input id="question" name="question" type="text" placeholder="Skriv dit spørgsmål her..." autocomplete="off" />
         <button type="submit">Send</button>
       </form>
 
-      <% if (error) { %>
-      <p class="error" role="alert"><%= error %></p>
-      <% } %>
+      <button type="button" id="clear-messages-button">Ryd beskeder</button>
 
-      <section class="messages">
-        <% if (messages.length === 0) { %>
-        <p class="empty-state">Ingen beskeder endnu – stil dit første spørgsmål ovenfor.</p>
-        <% } %> <% for (const message of messages) { %>
-        <article class="<%= message.type %>">
-          <p><%= message.text %></p>
-        </article>
-        <% } %>
-      </section>
+      <p class="error" role="alert"></p>
+
+      <section id="messages" class="messages"></section>
 
       <h2 class="stats-heading">Spørgsmål fordelt på emner</h2>
-      <ul class="stats">
-        <% for (const stat of Object.entries(topicStats)) { %>
-        <li><%= stat[0] %>: <%= stat[1] %></li>
-        <% } %>
-      </ul>
+      <ul class="stats"></ul>
     </main>
   </body>
 </html>
