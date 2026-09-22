@@ -24,5 +24,55 @@
     "type": "answer",
     "text": "Det kender jeg ikke svaret på endnu.",
     "createdAt": "2026-09-17T08:25:21.241Z"
+  },
+  {
+    "type": "question",
+    "text": "hej",
+    "createdAt": "2026-09-22T09:41:02.792Z"
+  },
+  {
+    "type": "answer",
+    "text": "Hej! Hvad vil du gerne vide om mig?",
+    "createdAt": "2026-09-22T09:41:02.793Z"
+  },
+  {
+    "type": "question",
+    "text": "hello",
+    "createdAt": "2026-09-22T09:41:44.525Z"
+  },
+  {
+    "type": "answer",
+    "text": "Hej! Hvad vil du gerne vide om mig?",
+    "createdAt": "2026-09-22T09:41:44.526Z"
+  },
+  {
+    "type": "question",
+    "text": "hej",
+    "createdAt": "2026-09-22T09:43:32.423Z"
+  },
+  {
+    "type": "answer",
+    "text": "Hej! Hvad vil du gerne vide om mig?",
+    "createdAt": "2026-09-22T09:43:32.425Z"
+  },
+  {
+    "type": "question",
+    "text": "hallo",
+    "createdAt": "2026-09-22T09:47:15.124Z"
+  },
+  {
+    "type": "answer",
+    "text": "Hej! Hvad vil du gerne vide om mig?",
+    "createdAt": "2026-09-22T09:47:15.124Z"
+  },
+  {
+    "type": "question",
+    "text": "Hvad kan du godt lide?",
+    "createdAt": "2026-09-22T09:47:30.612Z"
+  },
+  {
+    "type": "answer",
+    "text": "Det kender jeg ikke svaret på endnu.",
+    "createdAt": "2026-09-22T09:47:30.613Z"
   }
 ]

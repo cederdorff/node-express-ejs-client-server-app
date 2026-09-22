@@ -11,7 +11,6 @@ function displayMessage(message) {
         <p>${message.text}</p>
     </article>`;
 
-  console.log(html);
   messagesContainer.insertAdjacentHTML("beforeend", html);
 }
 
@@ -19,12 +18,9 @@ async function getMessages() {
   const response = await fetch(`${API_URL}/messages`);
   const messages = await response.json();
 
-  console.log(messages);
-
   for (const message of messages) {
     displayMessage(message);
   }
-  return messages;
 }
 
 getMessages();
@@ -32,7 +28,7 @@ getMessages();
 questionForm.addEventListener("submit", async (event) => {
   event.preventDefault();
 
-  const question = questionInput.value;
+  const question = questionInput.value.trim();
 
   const response = await fetch(`${API_URL}/messages`, {
     method: "POST",
@@ -42,8 +38,9 @@ questionForm.addEventListener("submit", async (event) => {
     body: JSON.stringify({ question })
   });
 
-  const message = await response.json();
-  displayMessage(message);
+  const data = await response.json();
+  displayMessage(data.question);
+  displayMessage(data.answer);
 
   questionInput.value = "";
 });
