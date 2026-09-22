@@ -12,6 +12,7 @@ function displayMessage(message) {
     </article>`;
 
   messagesContainer.insertAdjacentHTML("beforeend", html);
+  messagesContainer.scrollTop = messagesContainer.scrollHeight;
 }
 
 async function getMessages() {
