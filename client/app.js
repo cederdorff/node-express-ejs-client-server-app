@@ -6,14 +6,13 @@ const questionInput = document.querySelector("#question");
 const clearMessagesButton = document.querySelector("#clear-messages-button");
 
 function displayMessage(message) {
-  const html = `<article class="${message.type}"><p>${message.text}</p></article>`;
+  const html = /*html*/ `
+    <article class="${message.type}">
+        <p>${message.text}</p>
+    </article>`;
+
   console.log(html);
   messagesContainer.insertAdjacentHTML("beforeend", html);
-}
-
-function displayMessages(messages) {
-  messagesContainer.innerHTML = "";
-  messages.forEach(displayMessage);
 }
 
 async function getMessages() {
@@ -21,5 +20,38 @@ async function getMessages() {
   const messages = await response.json();
 
   console.log(messages);
+
+  for (const message of messages) {
+    displayMessage(message);
+  }
   return messages;
 }
+
+getMessages();
+
+questionForm.addEventListener("submit", async (event) => {
+  event.preventDefault();
+
+  const question = questionInput.value;
+
+  const response = await fetch(`${API_URL}/messages`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ question })
+  });
+
+  const message = await response.json();
+  displayMessage(message);
+
+  questionInput.value = "";
+});
+
+clearMessagesButton.addEventListener("click", async () => {
+  await fetch(`${API_URL}/messages`, {
+    method: "DELETE"
+  });
+
+  messagesContainer.innerHTML = "";
+});
